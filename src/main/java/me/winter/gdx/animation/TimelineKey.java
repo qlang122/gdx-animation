@@ -8,51 +8,52 @@ import me.winter.gdx.animation.math.Curve;
  *
  * @author Alexander Winter
  */
-public class TimelineKey
-{
-	private final int time;
-	private final int spin;
-	private final Curve curve;
-	private AnimatedPart object;
+public class TimelineKey {
+    private final int time;
+    private final int spin;
+    private final Curve curve;
+    private AnimatedPart object;
 
-	public TimelineKey(int time, int spin, Curve curve)
-	{
-		this.time = time;
-		this.spin = spin;
-		this.curve = curve;
-	}
+    public TimelineKey(int time, int spin, Curve curve) {
+        this.time = time;
+        this.spin = spin;
+        this.curve = curve;
+    }
 
-	public TimelineKey(TimelineKey key)
-	{
-		this.time = key.time;
-		this.spin = key.spin;
-		this.curve = key.curve;
-		this.object = key.object.clone();
-	}
+    public TimelineKey(TimelineKey key) {
+        this.time = key.time;
+        this.spin = key.spin;
+        this.curve = key.curve;
+        this.object = key.object.clone();
+    }
 
-	public int getSpin()
-	{
-		return spin;
-	}
+    public int getSpin() {
+        return spin;
+    }
 
-	public int getTime()
-	{
-		return time;
-	}
+    public int getTime() {
+        return time;
+    }
 
-	public Curve getCurve()
-	{
-		return curve;
-	}
+    public Curve getCurve() {
+        return curve;
+    }
 
-	public AnimatedPart getObject()
-	{
-		return this.object;
-	}
+    public AnimatedPart getObject() {
+        return this.object;
+    }
 
-	public void setObject(AnimatedPart object)
-	{
-		this.object = object;
-	}
+    public void setObject(AnimatedPart object) {
+        this.object = object;
+    }
 
+    @Override
+    public String toString() {
+        return "TimelineKey{" +
+                "time=" + time +
+                ", spin=" + spin +
+                ", curve=" + curve +
+                ", object=" + object +
+                '}';
+    }
 }

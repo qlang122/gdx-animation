@@ -2,6 +2,7 @@ package me.winter.gdx.animation;
 
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.IdentityMap;
+
 import me.winter.gdx.animation.math.Curve;
 
 /**
@@ -10,28 +11,34 @@ import me.winter.gdx.animation.math.Curve;
  *
  * @author Alexander Winter
  */
-public class MainlineKey
-{
-	public final int time;
-	public final Array<ObjectRef> objectRefs;
-	public final Curve curve;
+public class MainlineKey {
+    public final int time;
+    public final Array<ObjectRef> objectRefs;
+    public final Curve curve;
 
-	public MainlineKey(int time, Curve curve, Array<ObjectRef> objectRefs)
-	{
-		this.time = time;
-		this.curve = curve;
-		this.objectRefs = objectRefs;
-	}
+    public MainlineKey(int time, Curve curve, Array<ObjectRef> objectRefs) {
+        this.time = time;
+        this.curve = curve;
+        this.objectRefs = objectRefs;
+    }
 
-	public MainlineKey(MainlineKey other)
-	{
-		this.time = other.time;
-		this.curve = other.curve;
-		this.objectRefs = new Array<>(other.objectRefs.size);
+    public MainlineKey(MainlineKey other) {
+        this.time = other.time;
+        this.curve = other.curve;
+        this.objectRefs = new Array<>(other.objectRefs.size);
 
-		IdentityMap<ObjectRef, ObjectRef> graphIsomorphism = new IdentityMap<>();
+        IdentityMap<ObjectRef, ObjectRef> graphIsomorphism = new IdentityMap<>();
 
-		for(ObjectRef ref : other.objectRefs)
-			objectRefs.add(ref.clone(graphIsomorphism));
-	}
+        for (ObjectRef ref : other.objectRefs)
+            objectRefs.add(ref.clone(graphIsomorphism));
+    }
+
+    @Override
+    public String toString() {
+        return "MainlineKey{" +
+                "time=" + time +
+                ", objectRefs=" + objectRefs +
+                ", curve=" + curve +
+                '}';
+    }
 }

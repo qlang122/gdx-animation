@@ -2,6 +2,7 @@ package me.winter.gdx.animation;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
+
 import me.winter.gdx.animation.drawable.SpriteDrawable;
 
 /**
@@ -10,97 +11,92 @@ import me.winter.gdx.animation.drawable.SpriteDrawable;
  *
  * @author Alexander Winter
  */
-public class Sprite extends AnimatedPart
-{
-	private SpriteDrawable drawable;
-	private float alpha;
-	private int zIndex;
-	private boolean visible = true;
+public class Sprite extends AnimatedPart {
+    private SpriteDrawable drawable;
+    private float alpha;
+    private int zIndex;
+    private boolean visible = true;
 
-	public Sprite()
-	{
-		this(null, new Vector2(0, 0), new Vector2(1f, 1f), 0f, 1f, 0);
-	}
+    public Sprite() {
+        this(null, new Vector2(0, 0), new Vector2(1f, 1f), 0f, 1f, 0);
+    }
 
-	public Sprite(Sprite other)
-	{
-		super(other);
+    public Sprite(Sprite other) {
+        super(other);
 
-		this.drawable = other.drawable;
-		this.alpha = other.alpha;
-		this.zIndex = other.zIndex;
-	}
+        this.drawable = other.drawable;
+        this.alpha = other.alpha;
+        this.zIndex = other.zIndex;
+    }
 
-	public Sprite(SpriteDrawable drawable, Vector2 position, Vector2 scale, float angle, float alpha, int zIndex)
-	{
-		super(position, scale, angle);
+    public Sprite(SpriteDrawable drawable, Vector2 position, Vector2 scale, float angle, float alpha, int zIndex) {
+        super(position, scale, angle);
 
-		this.alpha = alpha;
-		this.drawable = drawable;
-		this.zIndex = zIndex;
-	}
+        this.alpha = alpha;
+        this.drawable = drawable;
+        this.zIndex = zIndex;
+    }
 
-	public void draw(Batch batch)
-	{
-		if(drawable != null && visible)
-			drawable.draw(this, batch);
-	}
+    public void draw(Batch batch) {
+        if (drawable != null && visible)
+            drawable.draw(this, batch);
+    }
 
-	/**
-	 * Sets the values of this object to the values of the given object.
-	 *
-	 * @param object the object
-	 */
-	@Override
-	public void set(AnimatedPart object)
-	{
-		super.set(object);
+    /**
+     * Sets the values of this object to the values of the given object.
+     *
+     * @param object the object
+     */
+    @Override
+    public void set(AnimatedPart object) {
+        super.set(object);
 
-		if(object instanceof Sprite)
-		{
-			this.alpha = ((Sprite)object).alpha;
-			this.drawable = ((Sprite)object).drawable;
-			this.zIndex = ((Sprite)object).zIndex;
-		}
-	}
+        if (object instanceof Sprite) {
+            this.alpha = ((Sprite) object).alpha;
+            this.drawable = ((Sprite) object).drawable;
+            this.zIndex = ((Sprite) object).zIndex;
+        }
+    }
 
-	public SpriteDrawable getDrawable()
-	{
-		return drawable;
-	}
+    public SpriteDrawable getDrawable() {
+        return drawable;
+    }
 
-	public void setDrawable(SpriteDrawable drawable)
-	{
-		this.drawable = drawable;
-	}
+    public void setDrawable(SpriteDrawable drawable) {
+        this.drawable = drawable;
+    }
 
-	public float getAlpha()
-	{
-		return alpha;
-	}
+    public float getAlpha() {
+        return alpha;
+    }
 
-	public void setAlpha(float alpha)
-	{
-		this.alpha = alpha;
-	}
+    public void setAlpha(float alpha) {
+        this.alpha = alpha;
+    }
 
-	public int getZIndex()
-	{
-		return zIndex;
-	}
+    public int getZIndex() {
+        return zIndex;
+    }
 
-	public void setZIndex(int zIndex)
-	{
-		this.zIndex = zIndex;
-	}
+    public void setZIndex(int zIndex) {
+        this.zIndex = zIndex;
+    }
 
-	public boolean isVisible()
-	{
-		return visible;
-	}
+    public boolean isVisible() {
+        return visible;
+    }
 
-	public void setVisible(boolean visible)
-	{
-		this.visible = visible;
-	}
+    public void setVisible(boolean visible) {
+        this.visible = visible;
+    }
+
+    @Override
+    public String toString() {
+        return "Sprite{" +
+                "drawable=" + drawable +
+                ", alpha=" + alpha +
+                ", zIndex=" + zIndex +
+                ", visible=" + visible +
+                '}';
+    }
 }

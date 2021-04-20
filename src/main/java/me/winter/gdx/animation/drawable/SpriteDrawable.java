@@ -1,6 +1,7 @@
 package me.winter.gdx.animation.drawable;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
+
 import me.winter.gdx.animation.Sprite;
 
 /**
@@ -10,7 +11,6 @@ import me.winter.gdx.animation.Sprite;
  *
  * @author Alexander Winter
  */
-public interface SpriteDrawable
-{
-	void draw(Sprite sprite, Batch batch);
+public interface SpriteDrawable {
+    void draw(Sprite sprite, Batch batch);
 }

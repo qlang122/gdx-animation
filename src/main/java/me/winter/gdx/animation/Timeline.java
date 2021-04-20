@@ -8,58 +8,70 @@ import com.badlogic.gdx.utils.Array;
  *
  * @author Alexander Winter
  */
-public class Timeline
-{
-	private final int id;
-	private final String name;
+public class Timeline {
+    private final int id;
+    private final String name;
 
-	private final Array<TimelineKey> keys;
+    private final Array<TimelineKey> keys;
 
-	public Timeline(int id, String name, Array<TimelineKey> timelineKeys)
-	{
-		this.id = id;
-		this.name = name;
-		this.keys = timelineKeys;
-	}
+    private boolean isVisible = true;
 
-	public Timeline(Timeline timeline)
-	{
-		this.id = timeline.id;
-		this.name = timeline.name;
-		this.keys = new Array<>(timeline.getKeys().size);
+    public Timeline(int id, String name, Array<TimelineKey> timelineKeys) {
+        this.id = id;
+        this.name = name;
+        this.keys = timelineKeys;
+    }
 
-		for(TimelineKey key : timeline.getKeys())
-			keys.add(new TimelineKey(key));
-	}
+    public Timeline(Timeline timeline) {
+        this.id = timeline.id;
+        this.name = timeline.name;
+        this.keys = new Array<>(timeline.getKeys().size);
 
-	@Override
-	public Timeline clone()
-	{
-		return new Timeline(this);
-	}
+        for (TimelineKey key : timeline.getKeys())
+            keys.add(new TimelineKey(key));
+    }
 
-	public int getId()
-	{
-		return id;
-	}
+    @Override
+    public Timeline clone() {
+        return new Timeline(this);
+    }
 
-	public String getName()
-	{
-		return name;
-	}
+    public int getId() {
+        return id;
+    }
 
-	public Array<TimelineKey> getKeys()
-	{
-		return keys;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public static Array<Timeline> clone(Array<Timeline> timelines)
-	{
-		Array<Timeline> copy = new Array<>();
+    public Array<TimelineKey> getKeys() {
+        return keys;
+    }
 
-		for(Timeline timeline : timelines)
-			copy.add(timeline.clone());
+    public static Array<Timeline> clone(Array<Timeline> timelines) {
+        Array<Timeline> copy = new Array<>();
 
-		return copy;
-	}
+        for (Timeline timeline : timelines)
+            copy.add(timeline.clone());
+
+        return copy;
+    }
+
+    public void setVisible(boolean visible) {
+        isVisible = visible;
+    }
+
+    public boolean isVisible() {
+        return isVisible;
+    }
+
+    @Override
+    public String toString() {
+        return "Timeline{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", keys=" + keys +
+                ", isVisible=" + isVisible +
+                '}';
+    }
 }

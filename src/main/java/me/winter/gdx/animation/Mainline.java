@@ -9,57 +9,56 @@ import com.badlogic.gdx.utils.Array;
  *
  * @author Alexander Winter
  */
-public class Mainline
-{
-	private final Array<MainlineKey> keys;
+public class Mainline {
+    private final Array<MainlineKey> keys;
 
-	public Mainline(int keys)
-	{
-		this.keys = new Array<>(keys);
-	}
+    public Mainline(int keys) {
+        this.keys = new Array<>(keys);
+    }
 
-	public Mainline(Mainline other)
-	{
-		this.keys = new Array<>(other.keys.size);
+    public Mainline(Mainline other) {
+        this.keys = new Array<>(other.keys.size);
 
-		for(MainlineKey key : other.keys)
-			keys.add(new MainlineKey(key));
-	}
+        for (MainlineKey key : other.keys)
+            keys.add(new MainlineKey(key));
+    }
 
-	/**
-	 * Returns the last previous MainlineKey before specified time
-	 *
-	 * @param time the time a key has to be before
-	 * @param wrapAround true if should wrap around the timeline, otherwise false
-	 *
-	 * @return last previous key before specified time, when not found first one is returned
-	 */
-	public MainlineKey getKeyBeforeTime(int time, boolean wrapAround)
-	{
-		MainlineKey found = wrapAround ? keys.get(keys.size - 1) : keys.get(0);
+    /**
+     * Returns the last previous MainlineKey before specified time
+     *
+     * @param time       the time a key has to be before
+     * @param wrapAround true if should wrap around the timeline, otherwise false
+     * @return last previous key before specified time, when not found first one is returned
+     */
+    public MainlineKey getKeyBeforeTime(int time, boolean wrapAround) {
+        MainlineKey found = wrapAround ? keys.get(keys.size - 1) : keys.get(0);
 
-		for(MainlineKey key : keys)
-		{
-			if(key.time > time)
-				break;
-			found = key;
-		}
+        for (MainlineKey key : keys) {
+            if (key.time > time)
+                break;
+            found = key;
+        }
 
-		return found;
-	}
+        return found;
+    }
 
-	public MainlineKey next(MainlineKey previous, boolean wrapAround)
-	{
-		int index = keys.indexOf(previous, true);
+    public MainlineKey next(MainlineKey previous, boolean wrapAround) {
+        int index = keys.indexOf(previous, true);
 
-		if(index + 1 == keys.size)
-			return wrapAround ? keys.get(0) : keys.get(keys.size - 1);
+        if (index + 1 == keys.size)
+            return wrapAround ? keys.get(0) : keys.get(keys.size - 1);
 
-		return keys.get(index + 1);
-	}
+        return keys.get(index + 1);
+    }
 
-	public Array<MainlineKey> getKeys()
-	{
-		return keys;
-	}
+    public Array<MainlineKey> getKeys() {
+        return keys;
+    }
+
+    @Override
+    public String toString() {
+        return "Mainline{" +
+                "keys=" + keys +
+                '}';
+    }
 }
