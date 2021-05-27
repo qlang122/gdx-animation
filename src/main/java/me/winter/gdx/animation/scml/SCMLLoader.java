@@ -36,6 +36,11 @@ public class SCMLLoader extends SynchronousAssetLoader<SCMLProject, Parameters> 
         return reader.load(file.read());
     }
 
+    public SCMLProject load(TextureAtlas textureAtlas, FileHandle scmlFile) {
+        reader.setAtlas(textureAtlas);
+        return reader.load(scmlFile.read());
+    }
+
     @Override
     public Array<AssetDescriptor> getDependencies(String fileName, FileHandle file, Parameters params) {
         AssetDescriptor<TextureAtlas> descriptor = new AssetDescriptor<>(params.textureAtlasName, TextureAtlas.class);

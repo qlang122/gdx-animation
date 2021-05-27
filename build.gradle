@@ -1,7 +1,7 @@
 apply plugin: 'maven'
 apply plugin: 'java-library'
 
-group 'com.github.qlang122'
+group 'com.github.qlang'
 version '1.0.5'
 
 sourceCompatibility = 1.8

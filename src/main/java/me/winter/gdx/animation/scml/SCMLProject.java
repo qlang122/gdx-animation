@@ -22,6 +22,12 @@ public class SCMLProject {
         this.entities = new Array<>();
     }
 
+    public Entity getEntity(int index) {
+        Entity entity = null;
+        if (entities.size > index) entity = entities.get(index);
+        return entity;
+    }
+
     /**
      * Returns an copy of the requested SpriterEntity
      *
