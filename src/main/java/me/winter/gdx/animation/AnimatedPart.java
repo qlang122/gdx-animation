@@ -91,9 +91,9 @@ public class AnimatedPart {
         setFlippedY(y);
     }
 
-    public void setScale(float scale) {
-        this.scale.x = scale;
-        this.scale.y = scale;
+    public void setScale(float scaleX, float scaleY) {
+        this.scale.x = scaleX;
+        this.scale.y = scaleY;
     }
 
     public Vector2 getPosition() {

@@ -2,10 +2,12 @@ package me.winter.gdx.animation;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.OrderedMap;
 
+import me.winter.gdx.animation.drawable.TintedSpriteDrawable;
 import me.winter.gdx.animation.math.Curve;
 
 import java.util.Comparator;
@@ -278,6 +280,64 @@ public class Animation {
                 }
             }
         }
+    }
+
+    public void setPosition(float x, float y) {
+        root.getPosition().set(x, y);
+    }
+
+    public Vector2 getPosition() {
+        return root.getPosition();
+    }
+
+    public void setAngle(float angle) {
+        root.setAngle(angle);
+    }
+
+    public float getAngle() {
+        return root.getAngle();
+    }
+
+    public void setScale(float scaleX, float scaleY) {
+        root.setScale(scaleX, scaleY);
+    }
+
+    public Vector2 getScale() {
+        return root.getScale();
+    }
+
+    public void setTransformation(String timelineName, Consumer<AnimatedPart> transformation) {
+        if (transformation == null)
+            transformations.remove(timelineName);
+        else
+            transformations.put(timelineName, transformation);
+    }
+
+    public void tintSprite(String name, Color color) {
+        for (Timeline timeline : timelines)
+            if (timeline.getName().equals(name))
+                for (TimelineKey key : timeline.getKeys())
+                    if (key.getObject() instanceof Sprite) {
+                        Sprite sprite = (Sprite) key.getObject();
+
+                        if (!(sprite.getDrawable() instanceof TintedSpriteDrawable))
+                            sprite.setDrawable(new TintedSpriteDrawable(((Sprite) key.getObject()).getDrawable(), color));
+                        else
+                            ((TintedSpriteDrawable) sprite.getDrawable()).setColor(color);
+                    }
+    }
+
+    public void tintSprite(Color color) {
+        for (Timeline timeline : timelines)
+            for (TimelineKey key : timeline.getKeys())
+                if (key.getObject() instanceof Sprite) {
+                    Sprite sprite = (Sprite) key.getObject();
+
+                    if (!(sprite.getDrawable() instanceof TintedSpriteDrawable))
+                        sprite.setDrawable(new TintedSpriteDrawable(((Sprite) key.getObject()).getDrawable(), color));
+                    else
+                        ((TintedSpriteDrawable) sprite.getDrawable()).setColor(color);
+                }
     }
 
     @Override

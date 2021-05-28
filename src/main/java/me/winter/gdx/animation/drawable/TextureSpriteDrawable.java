@@ -17,11 +17,7 @@ public class TextureSpriteDrawable implements SpriteDrawable {
     protected final float width, height;
 
     public TextureSpriteDrawable(TextureRegion region, float pivotX, float pivotY) {
-        this(region,
-                pivotX,
-                pivotY,
-                region != null ? region.getRegionWidth() : 0f,
-                region != null ? region.getRegionHeight() : 0f);
+        this(region, pivotX, pivotY, region != null ? region.getRegionWidth() : 0f, region != null ? region.getRegionHeight() : 0f);
     }
 
     /**
