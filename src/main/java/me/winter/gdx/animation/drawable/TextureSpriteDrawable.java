@@ -3,6 +3,8 @@ package me.winter.gdx.animation.drawable;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 
 import me.winter.gdx.animation.Sprite;
 
@@ -75,6 +77,22 @@ public class TextureSpriteDrawable implements SpriteDrawable {
 
     public float getPivotY() {
         return pivotY;
+    }
+
+    public Vector2 getPivot() {
+        return new Vector2(pivotX, pivotY);
+    }
+
+    public float getWidth() {
+        return width;
+    }
+
+    public float getHeight() {
+        return height;
+    }
+
+    public Rectangle getSize() {
+        return new Rectangle(0, 0, width, height);
     }
 
     @Override

@@ -2,6 +2,7 @@ package me.winter.gdx.animation;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
@@ -46,6 +47,10 @@ public class Animation {
     private final AnimatedPart root = new AnimatedPart();
 
     private boolean zIndexChanged = false;
+
+    private final Rectangle rectangle = new Rectangle();
+    private final RectF rect = new RectF();
+    private final Box prevBBox = new Box();
 
     public Animation(String name, int length, boolean looping, Mainline mainline, Array<Timeline> timelines) {
         this.name = name;
@@ -306,38 +311,57 @@ public class Animation {
         return root.getScale();
     }
 
+    public Rectangle getBoundingRectangle(ObjectRef rootRef) {
+        AnimatedPart part = rootRef == null ? this.root : tweenedObjects.get(rootRef.timeline);
+        rect.set(part.position.x, part.position.y, part.position.x, part.position.y);
+        calcBoundingRectangle(rootRef);
+        rectangle.set(rect.width() / 2, rect.height() / 2, rect.width(), rect.height());
+        return rectangle;
+    }
+
+    private void calcBoundingRectangle(ObjectRef rootRef) {
+        MainlineKey currentKey = mainline.getKeyBeforeTime((int) time, looping);
+        for (ObjectRef ref : currentKey.objectRefs) {
+            if (ref.parent != rootRef && rootRef != null) continue;
+            Timeline timeline = timelines.get(ref.timeline);
+            TimelineKey key = timeline.getKeys().get(ref.key);
+            this.prevBBox.calcFor(key.getObject());
+            Box.setBiggerRectangle(rect, this.prevBBox.getBoundingRect(), rect);
+//            this.calcBoundingRectangle(ref);
+        }
+    }
+
     public void setTransformation(String timelineName, Consumer<AnimatedPart> transformation) {
-        if (transformation == null)
-            transformations.remove(timelineName);
-        else
-            transformations.put(timelineName, transformation);
+        if (transformation == null) transformations.remove(timelineName);
+        else transformations.put(timelineName, transformation);
     }
 
     public void tintSprite(String name, Color color) {
-        for (Timeline timeline : timelines)
-            if (timeline.getName().equals(name))
-                for (TimelineKey key : timeline.getKeys())
+        for (Timeline timeline : timelines) {
+            if (timeline.getName().equals(name)) {
+                for (TimelineKey key : timeline.getKeys()) {
                     if (key.getObject() instanceof Sprite) {
                         Sprite sprite = (Sprite) key.getObject();
-
                         if (!(sprite.getDrawable() instanceof TintedSpriteDrawable))
                             sprite.setDrawable(new TintedSpriteDrawable(((Sprite) key.getObject()).getDrawable(), color));
-                        else
-                            ((TintedSpriteDrawable) sprite.getDrawable()).setColor(color);
+                        else ((TintedSpriteDrawable) sprite.getDrawable()).setColor(color);
                     }
+                }
+            }
+        }
     }
 
     public void tintSprite(Color color) {
-        for (Timeline timeline : timelines)
-            for (TimelineKey key : timeline.getKeys())
+        for (Timeline timeline : timelines) {
+            for (TimelineKey key : timeline.getKeys()) {
                 if (key.getObject() instanceof Sprite) {
                     Sprite sprite = (Sprite) key.getObject();
-
                     if (!(sprite.getDrawable() instanceof TintedSpriteDrawable))
                         sprite.setDrawable(new TintedSpriteDrawable(((Sprite) key.getObject()).getDrawable(), color));
-                    else
-                        ((TintedSpriteDrawable) sprite.getDrawable()).setColor(color);
+                    else ((TintedSpriteDrawable) sprite.getDrawable()).setColor(color);
                 }
+            }
+        }
     }
 
     @Override

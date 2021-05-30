@@ -12,8 +12,8 @@ import static java.lang.Math.signum;
  * @author Alexander Winter
  */
 public class AnimatedPart {
-    private final Vector2 position, scale;
-    private float angle;
+    public final Vector2 position, scale;
+    public float angle;
 
     /**
      * Constructor for root

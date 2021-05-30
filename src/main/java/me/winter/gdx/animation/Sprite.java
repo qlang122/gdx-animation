@@ -97,6 +97,9 @@ public class Sprite extends AnimatedPart {
                 ", alpha=" + alpha +
                 ", zIndex=" + zIndex +
                 ", visible=" + visible +
+                ", position=" + position +
+                ", scale=" + scale +
+                ", angle=" + angle +
                 '}';
     }
 }
