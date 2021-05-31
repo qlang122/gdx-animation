@@ -288,7 +288,7 @@ public class Animation {
     }
 
     public void setPosition(float x, float y) {
-        root.getPosition().set(x, y);
+        root.position.set(x, y);
     }
 
     public Vector2 getPosition() {
@@ -312,10 +312,11 @@ public class Animation {
     }
 
     public Rectangle getBoundingRectangle(ObjectRef rootRef) {
-        AnimatedPart part = rootRef == null ? this.root : tweenedObjects.get(rootRef.timeline);
+        AnimatedPart part = rootRef == null ? this.root : timelines.get(rootRef.timeline).getKeys().get(rootRef.key).getObject();
         rect.set(part.position.x, part.position.y, part.position.x, part.position.y);
         calcBoundingRectangle(rootRef);
-        rectangle.set(rect.width() / 2, rect.height() / 2, rect.width(), rect.height());
+//        System.out.println("---->>>>" + rect + " " + rect.centerX() + " " + rect.centerY());
+        rectangle.set(rect.centerX(), rect.centerY(), rect.width(), rect.height());
         return rectangle;
     }
 

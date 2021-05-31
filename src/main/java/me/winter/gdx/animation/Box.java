@@ -65,6 +65,20 @@ public class Box {
     }
 
     /**
+     * Returns a bounding box for this box.
+     *
+     * @return the bounding box
+     */
+    public RectF getBoundingRect() {
+        this.rect.set(points[0].x, points[0].y, points[0].x, points[0].y);
+        this.rect.left = Math.min(Math.min(Math.min(Math.min(points[0].x, points[1].x), points[2].x), points[3].x), this.rect.left);
+        this.rect.right = Math.max(Math.max(Math.max(Math.max(points[0].x, points[1].x), points[2].x), points[3].x), this.rect.right);
+        this.rect.top = Math.min(Math.min(Math.min(Math.min(points[0].y, points[1].y), points[2].y), points[3].y), this.rect.top);
+        this.rect.bottom = Math.max(Math.max(Math.max(Math.max(points[0].y, points[1].y), points[2].y), points[3].y), this.rect.bottom);
+        return this.rect;
+    }
+
+    /**
      * Returns whether the given coordinates lie inside the box of the given bone or object.
      *
      * @param part the AnimatedPart
@@ -113,20 +127,6 @@ public class Box {
 
     private boolean isInside(Rectangle rect, float x, float y) {
         return x >= rect.x && x <= rect.x + rect.width && y <= rect.y + rect.height && y >= rect.y;
-    }
-
-    /**
-     * Returns a bounding box for this box.
-     *
-     * @return the bounding box
-     */
-    public RectF getBoundingRect() {
-        this.rect.set(points[0].x, points[0].y, points[0].x, points[0].y);
-        this.rect.left = Math.min(Math.min(Math.min(Math.min(points[0].x, points[1].x), points[2].x), points[3].x), this.rect.left);
-        this.rect.right = Math.max(Math.max(Math.max(Math.max(points[0].x, points[1].x), points[2].x), points[3].x), this.rect.right);
-        this.rect.top = Math.min(Math.min(Math.min(Math.min(points[0].y, points[1].y), points[2].y), points[3].y), this.rect.top);
-        this.rect.bottom = Math.max(Math.max(Math.max(Math.max(points[0].y, points[1].y), points[2].y), points[3].y), this.rect.bottom);
-        return this.rect;
     }
 
     /**
