@@ -52,7 +52,7 @@ public class TextureSpriteDrawable implements SpriteDrawable {
         Color tmp = batch.getColor();
         tmp.a *= sprite.getAlpha();
         batch.setColor(tmp);
-
+        System.out.println("------>" + sprite.getAngle());
         batch.draw(region,
                 sprite.getPosition().x - originX,
                 sprite.getPosition().y - originY,

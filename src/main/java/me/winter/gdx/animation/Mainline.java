@@ -33,7 +33,7 @@ public class Mainline {
      * @param wrapAround true if should wrap around the timeline, otherwise false
      * @return last previous key before specified time, when not found first one is returned
      */
-    public Pair<MainlineKey, Integer> getKeyBeforeTime(int time, boolean wrapAround) {
+    public MainlineKey getKeyBeforeTime(int time, boolean wrapAround) {
         MainlineKey found = wrapAround ? keys.get(keys.size - 1) : keys.get(0);
 
         int index = wrapAround ? keys.size - 1 : 0;
@@ -45,6 +45,22 @@ public class Mainline {
             index = i;
         }
 
+        return found;
+    }
+
+    public Pair<MainlineKey, Integer> getKeyBeforeTime2(int time, boolean wrapAround) {
+        MainlineKey found = wrapAround ? keys.get(keys.size - 1) : keys.get(0);
+
+        int index = wrapAround ? keys.size - 1 : 0;
+
+        for (int i = 0; i < keys.size; i++) {
+            MainlineKey key = keys.get(i);
+            if (key.time > time) break;
+            found = key;
+            index = i;
+        }
+
+        tempKeyPair.clear();
         tempKeyPair.first = found;
         tempKeyPair.second = index;
         return tempKeyPair;

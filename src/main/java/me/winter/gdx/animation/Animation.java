@@ -110,12 +110,12 @@ public class Animation {
     public void update(float delta) {
         setTime(time + speed * delta);
 
-        currentKey = mainline.getKeyBeforeTime((int) time, looping);
+        MainlineKey currentKey = mainline.getKeyBeforeTime((int) time, looping);
 
         for (Sprite sprite : sprites)
             sprite.setVisible(false);
 
-        MainlineKey key = currentKey.first;
+        MainlineKey key = currentKey;
         for (ObjectRef ref : key.objectRefs)
             update(key, ref, (int) time);
     }
@@ -351,8 +351,8 @@ public class Animation {
     }
 
     private void calcBoundingRectangle(ObjectRef rootRef) {
-        Pair<MainlineKey, Integer> currentKey = mainline.getKeyBeforeTime((int) time, looping);
-        for (ObjectRef ref : currentKey.first.objectRefs) {
+        MainlineKey currentKey = mainline.getKeyBeforeTime((int) time, looping);
+        for (ObjectRef ref : currentKey.objectRefs) {
             if (ref.parent != rootRef && rootRef != null) continue;
             Timeline timeline = timelines.get(ref.timeline);
             TimelineKey key = timeline.getKeys().get(ref.key);
