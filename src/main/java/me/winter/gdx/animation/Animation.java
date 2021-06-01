@@ -51,6 +51,7 @@ public class Animation {
     private final Rectangle rectangle = new Rectangle();
     private final RectF rect = new RectF();
     private final Box prevBBox = new Box();
+    private Pair<MainlineKey, Integer> currentKey;
 
     public Animation(String name, int length, boolean looping, Mainline mainline, Array<Timeline> timelines) {
         this.name = name;
@@ -109,13 +110,24 @@ public class Animation {
     public void update(float delta) {
         setTime(time + speed * delta);
 
-        MainlineKey currentKey = mainline.getKeyBeforeTime((int) time, looping);
+        currentKey = mainline.getKeyBeforeTime((int) time, looping);
 
         for (Sprite sprite : sprites)
             sprite.setVisible(false);
 
-        for (ObjectRef ref : currentKey.objectRefs)
-            update(currentKey, ref, (int) time);
+        MainlineKey key = currentKey.first;
+        for (ObjectRef ref : key.objectRefs)
+            update(key, ref, (int) time);
+    }
+
+    public void update(MainlineKey key) {
+        if (key == null) return;
+
+        for (Sprite sprite : sprites)
+            sprite.setVisible(false);
+
+        for (ObjectRef ref : key.objectRefs)
+            update(key, ref, (int) time);
     }
 
     @SuppressWarnings("NewApi")
@@ -196,6 +208,24 @@ public class Animation {
     public void reset() {
         time = 0;
         update(0);
+    }
+
+    public void prevKey() {
+        if (currentKey == null) update(0);
+        Integer index = currentKey.second;
+        int size = mainline.getKeys().size;
+        index--;
+        if (index < 0) index = size - 1;
+        update(mainline.getKey(index));
+    }
+
+    public void nextKey() {
+        if (currentKey == null) update(0);
+        Integer index = currentKey.second;
+        int size = mainline.getKeys().size;
+        index++;
+        if (index > size - 1) index = 0;
+        update(mainline.getKey(index));
     }
 
     public AnimatedPart getRoot() {
@@ -321,8 +351,8 @@ public class Animation {
     }
 
     private void calcBoundingRectangle(ObjectRef rootRef) {
-        MainlineKey currentKey = mainline.getKeyBeforeTime((int) time, looping);
-        for (ObjectRef ref : currentKey.objectRefs) {
+        Pair<MainlineKey, Integer> currentKey = mainline.getKeyBeforeTime((int) time, looping);
+        for (ObjectRef ref : currentKey.first.objectRefs) {
             if (ref.parent != rootRef && rootRef != null) continue;
             Timeline timeline = timelines.get(ref.timeline);
             TimelineKey key = timeline.getKeys().get(ref.key);

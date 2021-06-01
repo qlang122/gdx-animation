@@ -92,8 +92,10 @@ public class AnimatedPart {
     }
 
     public void setScale(float scaleX, float scaleY) {
-        this.scale.x = scaleX;
-        this.scale.y = scaleY;
+        if (this.scale.x != scaleX)
+            this.scale.x = scaleX;
+        if (this.scale.y != scaleY)
+            this.scale.y = scaleY;
     }
 
     public Vector2 getPosition() {
@@ -109,7 +111,8 @@ public class AnimatedPart {
     }
 
     public void setAngle(float angle) {
-        this.angle = angle;
+        if (this.angle != angle)
+            this.angle = angle;
     }
 
     @Override

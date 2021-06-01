@@ -11,13 +11,16 @@ import com.badlogic.gdx.utils.Array;
  */
 public class Mainline {
     private final Array<MainlineKey> keys;
+    private final Pair<MainlineKey, Integer> tempKeyPair;
 
     public Mainline(int keys) {
         this.keys = new Array<>(keys);
+        tempKeyPair = new Pair<>();
     }
 
     public Mainline(Mainline other) {
         this.keys = new Array<>(other.keys.size);
+        tempKeyPair = new Pair<>();
 
         for (MainlineKey key : other.keys)
             keys.add(new MainlineKey(key));
@@ -30,16 +33,28 @@ public class Mainline {
      * @param wrapAround true if should wrap around the timeline, otherwise false
      * @return last previous key before specified time, when not found first one is returned
      */
-    public MainlineKey getKeyBeforeTime(int time, boolean wrapAround) {
+    public Pair<MainlineKey, Integer> getKeyBeforeTime(int time, boolean wrapAround) {
         MainlineKey found = wrapAround ? keys.get(keys.size - 1) : keys.get(0);
 
-        for (MainlineKey key : keys) {
-            if (key.time > time)
-                break;
+        int index = wrapAround ? keys.size - 1 : 0;
+
+        for (int i = 0; i < keys.size; i++) {
+            MainlineKey key = keys.get(i);
+            if (key.time > time) break;
             found = key;
+            index = i;
         }
 
-        return found;
+        tempKeyPair.first = found;
+        tempKeyPair.second = index;
+        return tempKeyPair;
+    }
+
+    public MainlineKey getKey(int index) {
+        if (index >= 0 && index < keys.size) {
+            keys.get(index);
+        }
+        return null;
     }
 
     public MainlineKey next(MainlineKey previous, boolean wrapAround) {
