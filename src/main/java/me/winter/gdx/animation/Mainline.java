@@ -36,13 +36,9 @@ public class Mainline {
     public MainlineKey getKeyBeforeTime(int time, boolean wrapAround) {
         MainlineKey found = wrapAround ? keys.get(keys.size - 1) : keys.get(0);
 
-        int index = wrapAround ? keys.size - 1 : 0;
-
-        for (int i = 0; i < keys.size; i++) {
-            MainlineKey key = keys.get(i);
+        for (MainlineKey key : keys) {
             if (key.time > time) break;
             found = key;
-            index = i;
         }
 
         return found;
@@ -60,7 +56,6 @@ public class Mainline {
             index = i;
         }
 
-        tempKeyPair.clear();
         tempKeyPair.first = found;
         tempKeyPair.second = index;
         return tempKeyPair;
@@ -68,9 +63,13 @@ public class Mainline {
 
     public MainlineKey getKey(int index) {
         if (index >= 0 && index < keys.size) {
-            keys.get(index);
+            return keys.get(index);
         }
         return null;
+    }
+
+    public int getKeySize() {
+        return keys == null ? 0 : keys.size;
     }
 
     public MainlineKey next(MainlineKey previous, boolean wrapAround) {

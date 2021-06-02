@@ -14,11 +14,6 @@ public class Pair<A, B> implements Serializable {
         this.second = second;
     }
 
-    public void clear() {
-        first = null;
-        second = null;
-    }
-
     @Override
     public String toString() {
         return "Pair{" +

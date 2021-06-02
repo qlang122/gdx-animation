@@ -51,6 +51,9 @@ public class Animation {
     private final Rectangle rectangle = new Rectangle();
     private final RectF rect = new RectF();
     private final Box prevBBox = new Box();
+
+    private boolean isCanPlay = false;
+    private boolean isCanAutoUpdate = true;
     private Pair<MainlineKey, Integer> currentKey;
 
     public Animation(String name, int length, boolean looping, Mainline mainline, Array<Timeline> timelines) {
@@ -108,26 +111,32 @@ public class Animation {
      * @param delta time in milliseconds
      */
     public void update(float delta) {
-        setTime(time + speed * delta);
+        if (isCanPlay)
+            setTime(time + speed * delta);
+        if (!looping && currentKey.second == mainline.getKeys().size - 1)
+            pausePlay();
 
-        MainlineKey currentKey = mainline.getKeyBeforeTime((int) time, looping);
+        if (isCanAutoUpdate)
+            currentKey = mainline.getKeyBeforeTime2((int) time, looping);
+        if (currentKey == null) return;
 
         for (Sprite sprite : sprites)
             sprite.setVisible(false);
 
-        MainlineKey key = currentKey;
+        MainlineKey key = currentKey.first;
         for (ObjectRef ref : key.objectRefs)
             update(key, ref, (int) time);
     }
 
-    public void update(MainlineKey key) {
+    public void update(MainlineKey key, int time) {
         if (key == null) return;
 
+        setTime(time);
         for (Sprite sprite : sprites)
             sprite.setVisible(false);
 
         for (ObjectRef ref : key.objectRefs)
-            update(key, ref, (int) time);
+            update(key, ref, (int) this.time);
     }
 
     @SuppressWarnings("NewApi")
@@ -210,22 +219,52 @@ public class Animation {
         update(0);
     }
 
+    public void first() {
+        isCanAutoUpdate = true;
+        reset();
+    }
+
+    public void last() {
+        if (currentKey == null) update(0);
+        isCanAutoUpdate = false;
+
+        MainlineKey oldKey = currentKey.first;
+        int index = mainline.getKeySize() - 1;
+
+        MainlineKey newKey = mainline.getKey(index);
+        currentKey.first = newKey;
+        currentKey.second = index;
+        update(currentKey.first, oldKey.time + (newKey.time - oldKey.time));
+    }
+
     public void prevKey() {
         if (currentKey == null) update(0);
+        isCanAutoUpdate = false;
+
+        MainlineKey oldKey = currentKey.first;
         Integer index = currentKey.second;
-        int size = mainline.getKeys().size;
+        int size = mainline.getKeySize();
         index--;
         if (index < 0) index = size - 1;
-        update(mainline.getKey(index));
+        MainlineKey newKey = mainline.getKey(index);
+        currentKey.first = newKey;
+        currentKey.second = index;
+        update(currentKey.first, oldKey.time + (newKey.time - oldKey.time));
     }
 
     public void nextKey() {
         if (currentKey == null) update(0);
+        isCanAutoUpdate = false;
+
+        MainlineKey oldKey = currentKey.first;
         Integer index = currentKey.second;
-        int size = mainline.getKeys().size;
+        int size = mainline.getKeySize();
         index++;
         if (index > size - 1) index = 0;
-        update(mainline.getKey(index));
+        MainlineKey newKey = mainline.getKey(index);
+        currentKey.first = newKey;
+        currentKey.second = index;
+        update(currentKey.first, oldKey.time + (newKey.time - oldKey.time));
     }
 
     public AnimatedPart getRoot() {
@@ -339,6 +378,24 @@ public class Animation {
 
     public Vector2 getScale() {
         return root.getScale();
+    }
+
+    public void startPlay() {
+        isCanPlay = true;
+        isCanAutoUpdate = true;
+    }
+
+    public void pausePlay() {
+        isCanPlay = false;
+    }
+
+    public void setPlay(boolean value) {
+        isCanPlay = value;
+        if (value) isCanAutoUpdate = true;
+    }
+
+    public boolean isPlaying() {
+        return isCanPlay;
     }
 
     public Rectangle getBoundingRectangle(ObjectRef rootRef) {
