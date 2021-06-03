@@ -347,8 +347,8 @@ public class Animation {
     public void makeTimelineVisible(Map<String, Boolean> values) {
         if (timelines == null) return;
 
-        for (Map.Entry<String, Boolean> e : values.entrySet()) {
-            for (Timeline line : timelines) {
+        for (Timeline line : timelines) {
+            for (Map.Entry<String, Boolean> e : values.entrySet()) {
                 if (e.getKey().equals(line.getName())) {
                     line.setVisible(e.getValue());
                 }
@@ -374,6 +374,10 @@ public class Animation {
 
     public void setScale(float scaleX, float scaleY) {
         root.setScale(scaleX, scaleY);
+    }
+
+    public void setScale(float scaleXY) {
+        root.setScale(scaleXY, scaleXY);
     }
 
     public Vector2 getScale() {
@@ -441,13 +445,18 @@ public class Animation {
 
     public void tintSprite(Color color) {
         for (Timeline timeline : timelines) {
-            for (TimelineKey key : timeline.getKeys()) {
-                if (key.getObject() instanceof Sprite) {
-                    Sprite sprite = (Sprite) key.getObject();
-                    if (!(sprite.getDrawable() instanceof TintedSpriteDrawable))
-                        sprite.setDrawable(new TintedSpriteDrawable(((Sprite) key.getObject()).getDrawable(), color));
-                    else ((TintedSpriteDrawable) sprite.getDrawable()).setColor(color);
-                }
+            tintSpriteTimeline(timeline, color);
+        }
+    }
+
+    public void tintSpriteTimeline(Timeline timeline, Color color) {
+        if (timeline == null) return;
+        for (TimelineKey key : timeline.getKeys()) {
+            if (key.getObject() instanceof Sprite) {
+                Sprite sprite = (Sprite) key.getObject();
+                if (!(sprite.getDrawable() instanceof TintedSpriteDrawable))
+                    sprite.setDrawable(new TintedSpriteDrawable(((Sprite) key.getObject()).getDrawable(), color));
+                else ((TintedSpriteDrawable) sprite.getDrawable()).setColor(color);
             }
         }
     }

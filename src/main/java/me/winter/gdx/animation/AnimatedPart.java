@@ -98,6 +98,13 @@ public class AnimatedPart {
             this.scale.y = scaleY;
     }
 
+    public void setScale(float scaleXY) {
+        if (this.scale.x != scaleXY)
+            this.scale.x = scaleXY;
+        if (this.scale.y != scaleXY)
+            this.scale.y = scaleXY;
+    }
+
     public Vector2 getPosition() {
         return position;
     }
