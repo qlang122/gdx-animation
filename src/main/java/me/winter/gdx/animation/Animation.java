@@ -52,7 +52,7 @@ public class Animation {
     private final RectF rect = new RectF();
     private final Box prevBBox = new Box();
 
-    private boolean isCanPlay = false;
+    private boolean isCanPlay = true;
     private boolean isCanAutoUpdate = true;
     private Pair<MainlineKey, Integer> currentKey;
 
