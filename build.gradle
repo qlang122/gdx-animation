@@ -11,5 +11,5 @@ repositories {
 }
 
 dependencies {
-    implementation "com.badlogicgames.gdx:gdx:1.9.14"
+    implementation "com.badlogicgames.gdx:gdx:$gdxVersion"
 }
