@@ -111,10 +111,12 @@ public class Animation {
      * @param delta time in milliseconds
      */
     public void update(float delta) {
-        if (isCanPlay)
-            setTime(time + speed * delta);
-        if (!looping && currentKey.second == mainline.getKeys().size - 1)
+        if (!looping && currentKey != null && currentKey.second == mainline.getKeys().size - 1) {
             pausePlay();
+        }
+        if (isCanPlay) {
+            setTime(time + speed * delta);
+        }
 
         if (isCanAutoUpdate)
             currentKey = mainline.getKeyBeforeTime2((int) time, looping);
