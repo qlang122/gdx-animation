@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Null;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.OrderedMap;
 
@@ -28,7 +29,7 @@ public class Animation {
 
     private final String name;
     private final int length; // millis
-    private boolean looping;
+    private boolean looping = false;
 
     private final Mainline mainline;
     private final Array<Timeline> timelines;
@@ -52,7 +53,7 @@ public class Animation {
     private final RectF rect = new RectF();
     private final Box prevBBox = new Box();
 
-    private boolean isCanPlay = true;
+    private boolean isCanPlay = false;
     private boolean isCanAutoUpdate = true;
     private Pair<MainlineKey, Integer> currentKey;
 
@@ -283,6 +284,14 @@ public class Animation {
 
     public Array<Timeline> getTimelines() {
         return timelines;
+    }
+
+    @Null
+    public Timeline getTimeline(String name) {
+        for (Timeline timeline : timelines) {
+            if (timeline.getName().equals(name)) return timeline;
+        }
+        return null;
     }
 
     public String getName() {
