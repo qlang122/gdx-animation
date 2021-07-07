@@ -270,6 +270,11 @@ public class Animation {
         update(currentKey.first, oldKey.time + (newKey.time - oldKey.time));
     }
 
+    public void setVisible(boolean value) {
+        for (Sprite sprite : sprites)
+            sprite.setVisible(value);
+    }
+
     public AnimatedPart getRoot() {
         return root;
     }
