@@ -106,21 +106,20 @@ public class Animation {
     }
 
     /**
-     * Updates this player. This means the current time gets increased by {@link #speed} and is applied to the current
-     * animation.
+     * update this player.
      *
-     * @param delta time in milliseconds
+     * @param time
      */
-    public void update(float delta) {
+    public void updateByTime(float time) {
         if (!looping && currentKey != null && currentKey.second == mainline.getKeys().size - 1) {
             pausePlay();
         }
         if (isCanPlay) {
-            setTime(time + speed * delta);
+            setTime(time);
         }
 
         if (isCanAutoUpdate)
-            currentKey = mainline.getKeyBeforeTime2((int) time, looping);
+            currentKey = mainline.getKeyBeforeTime2((int) this.time, looping);
         if (currentKey == null) return;
 
         for (Sprite sprite : sprites)
@@ -128,7 +127,17 @@ public class Animation {
 
         MainlineKey key = currentKey.first;
         for (ObjectRef ref : key.objectRefs)
-            update(key, ref, (int) time);
+            update(key, ref, (int) this.time);
+    }
+
+    /**
+     * Updates this player. This means the current time gets increased by {@link #speed} and is applied to the current
+     * animation.
+     *
+     * @param delta time in milliseconds
+     */
+    public void update(float delta) {
+        updateByTime(time + speed * delta);
     }
 
     public void update(MainlineKey key, int time) {
