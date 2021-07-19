@@ -82,13 +82,52 @@ public class SCMLReader {
     }
 
     /**
+     * Parses the SCML object save in the given xml string and returns the build data object.
+     *
+     * @param xml the xml string
+     * @return the built data
+     */
+    public SCMLProject loadAssets(String xml) {
+        XmlReader reader = new XmlReader();
+        return loadAssets(reader.parse(xml));
+    }
+
+    /**
+     * Parses the SCML objects saved in the given stream and returns the built data object.
+     *
+     * @param stream the stream from the SCML file
+     * @return the built data
+     */
+    public SCMLProject loadAssets(InputStream stream) {
+        XmlReader reader = new XmlReader();
+        return loadAssets(reader.parse(stream));
+    }
+
+    /**
+     * Reads the data from the given root element, i.e. the spriter_data node.
+     *
+     * @param root XML root of the SCML file
+     * @return the project file
+     */
+    public SCMLProject loadAssets(Element root) {
+        this.currentProject = new SCMLProject();
+        loadAssetsByName(root.getChildrenByName("folder"));
+        return currentProject;
+    }
+
+    /**
      * Iterates through the given folders and adds them to the current {@link SCMLProject} object.
      *
      * @param folders a list of folders to load
      */
     protected void loadAssets(Array<Element> folders) {
         for (Element folder : folders) {
-            for (Element file : folder.getChildrenByName("file")) {
+            Array<Element> files = folder.getChildrenByName("file");
+            if (files.size <= 0) {
+                currentProject.putFolderID(folder.getInt("id"), folder.get("name"));
+                continue;
+            }
+            for (Element file : files) {
                 String name = file.get("name");
 
                 String[] parts = name.split("/");
@@ -103,6 +142,25 @@ public class SCMLReader {
                         file.getFloat("pivot_y", 1f));
 
                 currentProject.putAsset(folder.getInt("id"), file.getInt("id"), asset);
+            }
+        }
+    }
+
+    private void loadAssetsByName(Array<Element> folders) {
+        for (Element folder : folders) {
+            for (Element file : folder.getChildrenByName("file")) {
+                String name = file.get("name");
+
+                String[] parts = name.split("/");
+                name = parts[parts.length - 1].replace(".png", "");
+
+                TextureRegion region = atlas.findRegion(name);
+
+                TextureSpriteDrawable asset = new TextureSpriteDrawable(region,
+                        file.getFloat("pivot_x", 0f),
+                        file.getFloat("pivot_y", 1f));
+
+                currentProject.putAsset(folder.get("name"), file.getInt("id"), asset);
             }
         }
     }
@@ -234,11 +292,14 @@ public class SCMLReader {
             float angle = obj.getFloat("angle", 0f);
 
             if (type.equalsIgnoreCase("object") || type.equalsIgnoreCase("sprite")) {
-                TextureSpriteDrawable asset = currentProject.getAsset(obj.getInt("folder"), obj.getInt("file")); //corresponding sprite
+                int folder = obj.getInt("folder");
+                int file = obj.getInt("file");
+                TextureSpriteDrawable asset = currentProject.getAsset(folder, file); //corresponding sprite
+                String folderName = currentProject.getFolderName(folder);
 
                 float alpha = obj.getFloat("a", 1f);
                 int zIndex = zIndexTmpMap.get(new ObjectRef(timelineId, keyId, null), 0);
-                key.setObject(new Sprite(asset, position, scale, angle, alpha, zIndex));
+                key.setObject(new Sprite(asset, folder, folderName, file, position, scale, angle, alpha, zIndex));
             } else if (type.equalsIgnoreCase("bone"))
                 key.setObject(new AnimatedPart(position, scale, angle));
 

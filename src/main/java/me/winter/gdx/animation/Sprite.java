@@ -12,13 +12,16 @@ import me.winter.gdx.animation.drawable.SpriteDrawable;
  * @author Alexander Winter
  */
 public class Sprite extends AnimatedPart {
+    private int folder;
+    private String folderName;
+    private int file;
     private SpriteDrawable drawable;
     private float alpha;
     private int zIndex;
     private boolean visible = true;
 
     public Sprite() {
-        this(null, new Vector2(0, 0), new Vector2(1f, 1f), 0f, 1f, 0);
+        this(null, -1, "", -1, new Vector2(0, 0), new Vector2(1f, 1f), 0f, 1f, 0);
     }
 
     public Sprite(Sprite other) {
@@ -29,9 +32,12 @@ public class Sprite extends AnimatedPart {
         this.zIndex = other.zIndex;
     }
 
-    public Sprite(SpriteDrawable drawable, Vector2 position, Vector2 scale, float angle, float alpha, int zIndex) {
+    public Sprite(SpriteDrawable drawable, int folder, String folderName, int file, Vector2 position, Vector2 scale, float angle, float alpha, int zIndex) {
         super(position, scale, angle);
 
+        this.folder = folder;
+        this.folderName = folderName;
+        this.file = file;
         this.alpha = alpha;
         this.drawable = drawable;
         this.zIndex = zIndex;
@@ -56,6 +62,18 @@ public class Sprite extends AnimatedPart {
             this.drawable = ((Sprite) object).drawable;
             this.zIndex = ((Sprite) object).zIndex;
         }
+    }
+
+    public int getFolder() {
+        return folder;
+    }
+
+    public String getFolderName() {
+        return folderName;
+    }
+
+    public int getFile() {
+        return file;
     }
 
     public SpriteDrawable getDrawable() {
