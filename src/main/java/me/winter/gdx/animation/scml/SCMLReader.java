@@ -123,8 +123,10 @@ public class SCMLReader {
     protected void loadAssets(Array<Element> folders) {
         for (Element folder : folders) {
             Array<Element> files = folder.getChildrenByName("file");
+            int folderID = folder.getInt("id");
+            String folderName = folder.getAttribute("name", "");
             if (files.size <= 0) {
-                currentProject.putFolderID(folder.getInt("id"), folder.get("name"));
+                currentProject.putFolderID(folderID, folderName);
                 continue;
             }
             for (Element file : files) {
@@ -141,7 +143,7 @@ public class SCMLReader {
                         file.getFloat("pivot_x", 0f),
                         file.getFloat("pivot_y", 1f));
 
-                currentProject.putAsset(folder.getInt("id"), file.getInt("id"), asset);
+                currentProject.putAsset(folderID, folderName, file.getInt("id"), asset);
             }
         }
     }

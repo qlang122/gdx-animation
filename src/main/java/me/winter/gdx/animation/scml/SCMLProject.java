@@ -43,8 +43,8 @@ public class SCMLProject {
         throw new EntityNotFoundException(name);
     }
 
-    public void putAsset(int folderID, int fileID, TextureSpriteDrawable asset) {
-        assets.put(getAssetKey(folderID, fileID), new Folder(folderID, fileID, "", asset));
+    public void putAsset(int folderID, String folderName, int fileID, TextureSpriteDrawable asset) {
+        assets.put(getAssetKey(folderID, fileID), new Folder(folderID, fileID, folderName, asset));
     }
 
     public void putAsset(String folderName, int fileID, TextureSpriteDrawable asset) {
