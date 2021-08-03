@@ -7,7 +7,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Null;
 import com.badlogic.gdx.utils.ObjectMap;
-import com.badlogic.gdx.utils.OrderedMap;
 
 import me.winter.gdx.animation.drawable.TintedSpriteDrawable;
 import me.winter.gdx.animation.math.Curve;
@@ -56,6 +55,9 @@ public class Animation {
     private boolean isCanPlay = false;
     private boolean isCanAutoUpdate = true;
     private Pair<MainlineKey, Integer> currentKey;
+
+    private AnimatorListener animatorListener;
+    private boolean canCall = false;
 
     public Animation(String name, int length, boolean looping, Mainline mainline, Array<Timeline> timelines) {
         this.name = name;
@@ -126,8 +128,24 @@ public class Animation {
             sprite.setVisible(false);
 
         MainlineKey key = currentKey.first;
+        int index = currentKey.second;
         for (ObjectRef ref : key.objectRefs)
             update(key, ref, (int) this.time);
+
+        if (animatorListener != null) {
+            if (index == 0) {
+                animatorListener.onStart(key, index);
+                canCall = true;
+            } else {
+                int size = mainline.getKeySize();
+                if (index == size - 1 || index == size - 2) {
+                    if (canCall) animatorListener.onEnd(key, index);
+                    canCall = false;
+                } else {
+                    animatorListener.onProgress(index, size);
+                }
+            }
+        }
     }
 
     /**
@@ -484,6 +502,10 @@ public class Animation {
                 else ((TintedSpriteDrawable) sprite.getDrawable()).setColor(color);
             }
         }
+    }
+
+    public void setAnimatorListener(AnimatorListener animatorListener) {
+        this.animatorListener = animatorListener;
     }
 
     @Override
