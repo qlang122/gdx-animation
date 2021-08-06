@@ -134,15 +134,15 @@ public class Animation {
 
         if (animatorListener != null) {
             if (index == 0) {
-                animatorListener.onStart(key, index);
+                animatorListener.onStart(this, index);
                 canCall = true;
             } else {
                 int size = mainline.getKeySize();
                 if (index == size - 1 || index == size - 2) {
-                    if (canCall) animatorListener.onEnd(key, index);
+                    if (canCall) animatorListener.onEnd(this, index);
                     canCall = false;
                 } else {
-                    animatorListener.onProgress(index, size);
+                    animatorListener.onProgress(this, index, size);
                 }
             }
         }
@@ -250,12 +250,19 @@ public class Animation {
     }
 
     public void first() {
-        isCanAutoUpdate = true;
-        reset();
+        if (currentKey == null)
+            currentKey = mainline.getKeyBeforeTime2(0, false);
+        isCanAutoUpdate = false;
+
+        MainlineKey newKey = mainline.getKey(0);
+        currentKey.first = newKey;
+        currentKey.second = 0;
+        update(currentKey.first, 0);
     }
 
     public void last() {
-        if (currentKey == null) update(0);
+        if (currentKey == null)
+            currentKey = mainline.getKeyBeforeTime2(0, false);
         isCanAutoUpdate = false;
 
         MainlineKey oldKey = currentKey.first;
@@ -268,7 +275,8 @@ public class Animation {
     }
 
     public void prevKey() {
-        if (currentKey == null) update(0);
+        if (currentKey == null)
+            currentKey = mainline.getKeyBeforeTime2(0, false);
         isCanAutoUpdate = false;
 
         MainlineKey oldKey = currentKey.first;
@@ -283,7 +291,8 @@ public class Animation {
     }
 
     public void nextKey() {
-        if (currentKey == null) update(0);
+        if (currentKey == null)
+            currentKey = mainline.getKeyBeforeTime2(0, false);
         isCanAutoUpdate = false;
 
         MainlineKey oldKey = currentKey.first;
